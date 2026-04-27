@@ -1,0 +1,1850 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Adir & Dhakir — Your Family</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #F0D080;
+    --gold-dark: #8B6914;
+    --emerald: #1A6B4A;
+    --emerald-light: #2A9D6F;
+    --emerald-pale: #E8F5EE;
+    --night: #0D1B2A;
+    --night-mid: #1A2D3F;
+    --night-light: #243B53;
+    --cream: #FBF7EE;
+    --cream-dark: #F0E8D5;
+    --text-dark: #1A1207;
+    --text-mid: #5C4B2A;
+    --text-muted: #9B8A6B;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text-dark);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  .font-arabic { font-family: 'Amiri', serif; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--cream-dark); }
+  ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+
+  /* Geometric background pattern */
+  .geo-bg {
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C9A84C' fill-opacity='0.07'%3E%3Cpath d='M30 0L60 30L30 60L0 30z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  /* Onboarding */
+  #onboarding {
+    background: var(--night);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    transition: opacity 0.6s, transform 0.6s;
+  }
+  #onboarding.hidden { opacity: 0; pointer-events: none; transform: scale(0.96); }
+
+  .onboard-card {
+    background: linear-gradient(145deg, var(--night-mid), var(--night-light));
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 24px;
+    padding: 48px 40px;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+    position: relative;
+    overflow: hidden;
+  }
+  .onboard-card::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(201,168,76,0.15), transparent 70%);
+    border-radius: 50%;
+  }
+  .onboard-card::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: -60px;
+    width: 180px; height: 180px;
+    background: radial-gradient(circle, rgba(26,107,74,0.2), transparent 70%);
+    border-radius: 50%;
+  }
+
+  .gold-input {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(201,168,76,0.35);
+    border-radius: 12px;
+    color: #fff;
+    padding: 14px 18px;
+    width: 100%;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 15px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+  }
+  .gold-input:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(201,168,76,0.15);
+  }
+  .gold-input::placeholder { color: rgba(255,255,255,0.35); }
+  .gold-input option { background: var(--night-mid); color: #fff; }
+
+  .role-btn {
+    background: rgba(255,255,255,0.06);
+    border: 1.5px solid rgba(201,168,76,0.25);
+    border-radius: 12px;
+    color: rgba(255,255,255,0.75);
+    padding: 14px 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .role-btn:hover { border-color: var(--gold); color: #fff; background: rgba(201,168,76,0.1); }
+  .role-btn.active { border-color: var(--gold); background: rgba(201,168,76,0.18); color: var(--gold-light); }
+  .role-btn .role-icon { font-size: 26px; display: block; margin-bottom: 6px; }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+    border: none;
+    border-radius: 12px;
+    color: var(--night);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 16px 32px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s, opacity 0.2s;
+    width: 100%;
+  }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(201,168,76,0.4); }
+  .btn-primary:active { transform: translateY(0); }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+  /* Sidebar */
+  #sidebar {
+    position: fixed;
+    left: 0; top: 0; bottom: 0;
+    width: 240px;
+    background: var(--night);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid rgba(201,168,76,0.15);
+    transition: transform 0.3s;
+  }
+  .sidebar-logo {
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid rgba(201,168,76,0.12);
+  }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 22px;
+    color: rgba(255,255,255,0.55);
+    cursor: pointer;
+    border-radius: 0;
+    border-left: 3px solid transparent;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+  .nav-item:hover { color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.04); }
+  .nav-item.active { color: var(--gold-light); border-left-color: var(--gold); background: rgba(201,168,76,0.08); }
+  .nav-icon { font-size: 18px; width: 22px; text-align: center; }
+
+  /* Main layout */
+  #main-app { margin-left: 240px; min-height: 100vh; }
+  .page { display: none; padding: 32px; animation: fadeIn 0.3s ease; }
+  .page.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Top bar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--cream-dark);
+  }
+  .greeting-name { color: var(--gold-dark); font-weight: 700; }
+
+  /* Cards */
+  .card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 24px;
+    border: 1px solid var(--cream-dark);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  }
+  .card-dark {
+    background: var(--night);
+    border-radius: 20px;
+    padding: 24px;
+    color: #fff;
+    border: 1px solid rgba(201,168,76,0.2);
+  }
+
+  /* Prayer card */
+  .prayer-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 13px 16px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    background: var(--cream);
+    border: 1px solid var(--cream-dark);
+    transition: background 0.2s;
+  }
+  .prayer-row.current {
+    background: linear-gradient(135deg, rgba(201,168,76,0.15), rgba(26,107,74,0.1));
+    border-color: var(--gold);
+  }
+  .prayer-name { font-weight: 600; font-size: 14px; color: var(--text-dark); }
+  .prayer-time-text { font-size: 14px; color: var(--text-mid); font-weight: 500; }
+  .iqama-badge {
+    font-size: 11px;
+    background: rgba(201,168,76,0.15);
+    color: var(--gold-dark);
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-weight: 600;
+  }
+
+  /* Athkar */
+  .athkar-card {
+    background: linear-gradient(135deg, var(--night), var(--night-mid));
+    border-radius: 20px;
+    padding: 28px;
+    color: #fff;
+    border: 1px solid rgba(201,168,76,0.2);
+    position: relative;
+    overflow: hidden;
+  }
+  .athkar-card::after {
+    content: '☽';
+    position: absolute;
+    right: 24px;
+    top: 16px;
+    font-size: 48px;
+    opacity: 0.1;
+  }
+  .athkar-text {
+    font-family: 'Amiri', serif;
+    font-size: 22px;
+    line-height: 1.8;
+    color: var(--gold-light);
+    text-align: right;
+    direction: rtl;
+    margin-bottom: 12px;
+  }
+  .athkar-translation {
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+    font-style: italic;
+  }
+  .athkar-count-btn {
+    background: rgba(201,168,76,0.2);
+    border: 1.5px solid rgba(201,168,76,0.4);
+    border-radius: 50%;
+    width: 54px;
+    height: 54px;
+    color: var(--gold-light);
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .athkar-count-btn:hover { background: rgba(201,168,76,0.35); transform: scale(1.05); }
+  .athkar-count-btn:active { transform: scale(0.95); }
+
+  /* Water tracker */
+  .water-glass {
+    width: 36px; height: 48px;
+    border: 2.5px solid #60a5fa;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+    background: rgba(96,165,250,0.08);
+    display: inline-flex; align-items: flex-end;
+  }
+  .water-glass.filled .water-fill {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(to top, #3b82f6, #60a5fa);
+    transition: height 0.4s ease;
+  }
+  .water-glass.filled { border-color: #3b82f6; }
+
+  /* Task items */
+  .task-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    background: var(--cream);
+    border: 1px solid var(--cream-dark);
+    border-radius: 14px;
+    margin-bottom: 10px;
+    transition: all 0.2s;
+  }
+  .task-item.done { opacity: 0.55; }
+  .task-item.done .task-title { text-decoration: line-through; color: var(--text-muted); }
+  .task-check {
+    width: 22px; height: 22px;
+    border: 2px solid var(--gold);
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.15s;
+    background: transparent;
+  }
+  .task-check.checked { background: var(--gold); border-color: var(--gold); }
+  .task-title { font-size: 14px; font-weight: 500; flex: 1; }
+  .task-time-badge {
+    font-size: 11px;
+    padding: 3px 9px;
+    border-radius: 6px;
+    background: rgba(201,168,76,0.12);
+    color: var(--gold-dark);
+    font-weight: 600;
+  }
+
+  /* Quran progress */
+  .quran-progress-bar {
+    height: 8px;
+    background: var(--cream-dark);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 10px 0;
+  }
+  .quran-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--emerald), var(--emerald-light));
+    border-radius: 4px;
+    transition: width 0.5s ease;
+  }
+
+  /* Notification toast */
+  #toast-container {
+    position: fixed;
+    top: 24px; right: 24px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+  }
+  .toast {
+    background: var(--night);
+    color: #fff;
+    border-left: 4px solid var(--gold);
+    border-radius: 12px;
+    padding: 14px 18px;
+    min-width: 280px;
+    max-width: 340px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+    animation: slideIn 0.3s ease, slideOut 0.3s ease 4s forwards;
+    pointer-events: all;
+    font-size: 14px;
+  }
+  .toast.spiritual { border-left-color: #60a5fa; }
+  .toast.health { border-left-color: #34d399; }
+  .toast.prayer { border-left-color: var(--gold); }
+  @keyframes slideIn { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: translateX(0); } }
+  @keyframes slideOut { from { opacity: 1; } to { opacity: 0; transform: translateX(40px); } }
+
+  /* Profile switcher */
+  .profile-pill {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--night);
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 999px;
+    padding: 6px 14px 6px 8px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+  .profile-pill:hover { border-color: var(--gold); }
+  .profile-avatar {
+    width: 30px; height: 30px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+    font-size: 12px;
+    color: var(--night);
+    flex-shrink: 0;
+  }
+
+  /* Stats ring */
+  .ring-svg { transform: rotate(-90deg); }
+
+  /* Notification permission banner */
+  .notif-banner {
+    background: linear-gradient(135deg, rgba(201,168,76,0.1), rgba(26,107,74,0.08));
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 14px;
+    padding: 14px 18px;
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 24px;
+  }
+
+  /* Mobile */
+  #mobile-nav {
+    display: none;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--night);
+    border-top: 1px solid rgba(201,168,76,0.15);
+    z-index: 100;
+    padding: 8px 0 env(safe-area-inset-bottom, 8px);
+  }
+  #hamburger { display: none; }
+
+  @media (max-width: 768px) {
+    #sidebar { transform: translateX(-100%); }
+    #sidebar.open { transform: translateX(0); }
+    #main-app { margin-left: 0; padding-bottom: 70px; }
+    #mobile-nav { display: flex; }
+    #hamburger { display: flex; }
+    .page { padding: 20px 16px; }
+    .topbar { padding-bottom: 16px; margin-bottom: 20px; }
+  }
+  .mob-nav-item {
+    flex: 1;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 6px;
+    color: rgba(255,255,255,0.45);
+    cursor: pointer;
+    transition: color 0.2s;
+    font-size: 10px;
+    font-weight: 500;
+    gap: 3px;
+  }
+  .mob-nav-item.active { color: var(--gold-light); }
+  .mob-nav-icon { font-size: 20px; }
+
+  /* Divider */
+  .section-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.3);
+    padding: 14px 22px 6px;
+  }
+
+  /* Switch toggle */
+  .toggle { position: relative; width: 42px; height: 24px; display: inline-block; }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider {
+    position: absolute; inset: 0;
+    background: rgba(255,255,255,0.15);
+    border-radius: 24px;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  .toggle-slider:before {
+    content: '';
+    position: absolute;
+    width: 18px; height: 18px;
+    left: 3px; bottom: 3px;
+    background: #fff;
+    border-radius: 50%;
+    transition: 0.2s;
+  }
+  input:checked + .toggle-slider { background: var(--gold); }
+  input:checked + .toggle-slider:before { transform: translateX(18px); }
+
+  /* Stat pill */
+  .stat-pill {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 16px;
+    border-radius: 12px;
+    background: var(--cream);
+    border: 1px solid var(--cream-dark);
+  }
+  .stat-pill-icon { font-size: 20px; }
+  .stat-pill-val { font-size: 20px; font-weight: 700; color: var(--text-dark); }
+  .stat-pill-label { font-size: 12px; color: var(--text-muted); }
+
+  /* Input/select inside cards */
+  .form-input {
+    background: var(--cream);
+    border: 1.5px solid var(--cream-dark);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 14px;
+    color: var(--text-dark);
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+  .form-input:focus { border-color: var(--gold); }
+
+  .btn-secondary {
+    background: transparent;
+    border: 1.5px solid var(--gold);
+    border-radius: 10px;
+    color: var(--gold-dark);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-secondary:hover { background: rgba(201,168,76,0.08); }
+
+  .btn-small {
+    background: transparent;
+    border: 1px solid var(--cream-dark);
+    border-radius: 8px;
+    color: var(--text-muted);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 12px;
+    padding: 5px 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-small:hover { border-color: #ef4444; color: #ef4444; }
+
+  /* Ornamental divider */
+  .ornament {
+    text-align: center;
+    color: var(--gold);
+    font-size: 20px;
+    letter-spacing: 8px;
+    opacity: 0.5;
+    margin: 4px 0;
+  }
+
+  /* Next prayer highlight */
+  .next-prayer-hero {
+    background: linear-gradient(135deg, var(--night), var(--night-mid));
+    border-radius: 20px;
+    padding: 24px;
+    color: #fff;
+    border: 1px solid rgba(201,168,76,0.25);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .next-prayer-hero::before {
+    content: '';
+    position: absolute;
+    top: -40px; left: 50%;
+    transform: translateX(-50%);
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(201,168,76,0.12), transparent 70%);
+    border-radius: 50%;
+  }
+
+  /* Backdrop for mobile sidebar */
+  #sidebar-backdrop {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 99;
+  }
+</style>
+</head>
+<body class="geo-bg">
+
+<!-- Toast container -->
+<div id="toast-container"></div>
+
+<!-- Sidebar backdrop (mobile) -->
+<div id="sidebar-backdrop" onclick="closeSidebar()"></div>
+
+<!-- ===== ONBOARDING ===== -->
+<div id="onboarding">
+  <div class="onboard-card" style="position:relative;z-index:1;">
+    <div class="ornament">✦ ✦ ✦</div>
+    <div style="text-align:center;margin:16px 0 28px;">
+      <p style="font-family:'Amiri',serif;font-size:28px;color:var(--gold-light);font-weight:700;letter-spacing:1px;">ذِكر وأدِر</p>
+      <p style="font-size:22px;font-weight:700;color:#fff;margin-top:4px;">Adir & Dhakir</p>
+      <p style="font-size:13px;color:rgba(255,255,255,0.45);margin-top:6px;">Your Family Organizer & Spiritual Companion</p>
+    </div>
+
+    <div style="margin-bottom:20px;">
+      <label style="display:block;font-size:12px;font-weight:600;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Your Name</label>
+      <input id="ob-name" type="text" placeholder="Enter your name..." class="gold-input" />
+    </div>
+
+    <div style="margin-bottom:24px;">
+      <label style="display:block;font-size:12px;font-weight:600;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;">Family Role</label>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">
+        <button class="role-btn" onclick="selectRole(this,'Father')"><span class="role-icon">👨</span>Father</button>
+        <button class="role-btn" onclick="selectRole(this,'Mother')"><span class="role-icon">👩</span>Mother</button>
+        <button class="role-btn" onclick="selectRole(this,'Son')"><span class="role-icon">👦</span>Son</button>
+        <button class="role-btn" onclick="selectRole(this,'Daughter')"><span class="role-icon">👧</span>Daughter</button>
+      </div>
+    </div>
+
+    <div style="margin-bottom:20px;">
+      <label style="display:block;font-size:12px;font-weight:600;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">City (for Prayer Times)</label>
+      <input id="ob-city" type="text" placeholder="e.g. Jeddah" class="gold-input" value="Jeddah" />
+    </div>
+
+    <button id="ob-start-btn" class="btn-primary" onclick="startApp()" disabled>Enter the App ✦</button>
+    <p style="text-align:center;font-size:12px;color:rgba(255,255,255,0.25);margin-top:16px;">All data is stored locally on your device</p>
+  </div>
+</div>
+
+<!-- ===== SIDEBAR ===== -->
+<div id="sidebar">
+  <div class="sidebar-logo">
+    <p style="font-family:'Amiri',serif;font-size:20px;color:var(--gold-light);font-weight:700;">ذِكر وأدِر</p>
+    <p style="font-size:12px;color:rgba(255,255,255,0.35);margin-top:2px;">Your Family</p>
+  </div>
+
+  <div style="padding:16px 12px;border-bottom:1px solid rgba(255,255,255,0.07);">
+    <div class="profile-pill" id="sidebar-profile" onclick="showProfileModal()">
+      <div class="profile-avatar" id="sidebar-avatar">A</div>
+      <div>
+        <p style="font-size:13px;font-weight:600;color:#fff;" id="sidebar-name">User</p>
+        <p style="font-size:11px;color:rgba(255,255,255,0.4);" id="sidebar-role">Family</p>
+      </div>
+    </div>
+  </div>
+
+  <nav style="flex:1;padding:12px 0;overflow-y:auto;">
+    <div class="section-title">Navigation</div>
+    <a class="nav-item active" data-page="home" onclick="navigate('home')">
+      <span class="nav-icon">🏠</span> Home
+    </a>
+    <a class="nav-item" data-page="prayers" onclick="navigate('prayers')">
+      <span class="nav-icon">🕌</span> Prayer Times
+    </a>
+    <a class="nav-item" data-page="spiritual" onclick="navigate('spiritual')">
+      <span class="nav-icon">📿</span> Spiritual
+    </a>
+    <a class="nav-item" data-page="health" onclick="navigate('health')">
+      <span class="nav-icon">💧</span> Health
+    </a>
+    <a class="nav-item" data-page="tasks" onclick="navigate('tasks')">
+      <span class="nav-icon">✅</span> My Tasks
+    </a>
+    <div class="section-title" style="margin-top:8px;">Settings</div>
+    <a class="nav-item" onclick="showSettingsModal()">
+      <span class="nav-icon">⚙️</span> Settings
+    </a>
+  </nav>
+
+  <div style="padding:16px;border-top:1px solid rgba(255,255,255,0.07);">
+    <p style="font-size:11px;color:rgba(255,255,255,0.2);text-align:center;">Adir & Dhakir — v1.0</p>
+  </div>
+</div>
+
+<!-- ===== MAIN APP ===== -->
+<div id="main-app" style="display:none;">
+
+  <!-- Mobile header -->
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:16px;background:var(--night);border-bottom:1px solid rgba(201,168,76,0.15);position:sticky;top:0;z-index:50;" id="mobile-header">
+    <button id="hamburger" onclick="toggleSidebar()" style="background:none;border:none;color:#fff;font-size:22px;cursor:pointer;display:flex;align-items:center;padding:4px;">☰</button>
+    <p style="font-family:'Amiri',serif;font-size:18px;color:var(--gold-light);font-weight:700;">ذِكر وأدِر</p>
+    <div class="profile-avatar" id="mobile-avatar" style="width:34px;height:34px;font-size:13px;cursor:pointer;" onclick="showProfileModal()">A</div>
+  </div>
+
+  <!-- ===== HOME PAGE ===== -->
+  <div id="page-home" class="page active">
+    <div class="topbar" style="display:flex;flex-wrap:wrap;gap:12px;">
+      <div>
+        <p id="home-greeting" style="font-size:24px;font-weight:700;color:var(--text-dark);">Good morning, <span class="greeting-name" id="home-name">Friend</span> ✦</p>
+        <p id="home-date" style="font-size:14px;color:var(--text-muted);margin-top:4px;"></p>
+      </div>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:10px;">
+        <div id="home-weather-badge" style="display:none;background:var(--night);border:1px solid rgba(201,168,76,0.2);border-radius:999px;padding:6px 14px;color:rgba(255,255,255,0.85);font-size:13px;font-weight:500;"></div>
+      </div>
+    </div>
+
+    <!-- Notification banner -->
+    <div class="notif-banner" id="notif-banner" style="display:none;">
+      <span style="font-size:22px;">🔔</span>
+      <div style="flex:1;">
+        <p style="font-weight:600;font-size:14px;color:var(--text-dark);">Enable Notifications</p>
+        <p style="font-size:12px;color:var(--text-muted);">Get prayer times, athkar & task reminders</p>
+      </div>
+      <button onclick="requestNotifPermission()" class="btn-secondary" style="white-space:nowrap;">Allow</button>
+    </div>
+
+    <!-- Stats row -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-bottom:28px;">
+      <div class="stat-pill">
+        <span class="stat-pill-icon">💧</span>
+        <div>
+          <p class="stat-pill-val" id="stat-water">0/8</p>
+          <p class="stat-pill-label">Glasses today</p>
+        </div>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-pill-icon">📖</span>
+        <div>
+          <p class="stat-pill-val" id="stat-quran">0/2</p>
+          <p class="stat-pill-label">Quran pages</p>
+        </div>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-pill-icon">✅</span>
+        <div>
+          <p class="stat-pill-val" id="stat-tasks">0/0</p>
+          <p class="stat-pill-label">Tasks done</p>
+        </div>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-pill-icon">📿</span>
+        <div>
+          <p class="stat-pill-val" id="stat-athkar">0%</p>
+          <p class="stat-pill-label">Athkar done</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+      <!-- Next prayer -->
+      <div class="next-prayer-hero">
+        <p style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.4);font-weight:600;margin-bottom:8px;">Next Prayer</p>
+        <p id="home-next-prayer-name" style="font-size:28px;font-weight:700;color:var(--gold-light);margin-bottom:4px;">—</p>
+        <p id="home-next-prayer-time" style="font-size:40px;font-weight:300;color:#fff;letter-spacing:-1px;margin-bottom:4px;">—:——</p>
+        <p id="home-next-prayer-countdown" style="font-size:13px;color:rgba(255,255,255,0.5);">Calculating...</p>
+        <div style="margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.08);">
+          <p id="home-iqama-time" style="font-size:12px;color:rgba(201,168,76,0.7);">Iqama in —</p>
+        </div>
+      </div>
+
+      <!-- Quick athkar -->
+      <div class="card" style="display:flex;flex-direction:column;justify-content:space-between;">
+        <div>
+          <p style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:10px;">Today's Dhikr</p>
+          <p id="home-athkar-preview" class="font-arabic" style="font-size:19px;color:var(--gold-dark);line-height:1.7;text-align:right;direction:rtl;">سُبْحَانَ اللَّهِ</p>
+        </div>
+        <button onclick="navigate('spiritual')" class="btn-secondary" style="margin-top:14px;width:100%;">Go to Athkar →</button>
+      </div>
+
+      <!-- Today's tasks preview -->
+      <div class="card" style="grid-column:1/-1;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+          <p style="font-size:15px;font-weight:700;color:var(--text-dark);">Today's Tasks</p>
+          <button onclick="navigate('tasks')" class="btn-secondary">View all</button>
+        </div>
+        <div id="home-tasks-preview">
+          <p style="font-size:14px;color:var(--text-muted);text-align:center;padding:16px 0;">No tasks yet — add some in My Tasks!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PRAYER TIMES PAGE ===== -->
+  <div id="page-prayers" class="page">
+    <div class="topbar">
+      <div>
+        <p style="font-size:24px;font-weight:700;">Prayer Times 🕌</p>
+        <p style="font-size:14px;color:var(--text-muted);margin-top:4px;" id="prayer-city-label">Umm Al-Qura • Jeddah</p>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <input id="prayer-city-input" class="form-input" style="width:180px;" placeholder="Change city..." />
+        <button onclick="updatePrayerCity()" class="btn-secondary">Update</button>
+      </div>
+    </div>
+
+    <div id="prayer-loading" style="text-align:center;padding:40px;color:var(--text-muted);">
+      <p style="font-size:24px;margin-bottom:8px;">🕌</p>
+      <p>Fetching prayer times...</p>
+    </div>
+
+    <div id="prayer-content" style="display:none;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px;">
+        <!-- Today's prayers -->
+        <div class="card" style="grid-column:1/-1;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+            <p style="font-size:16px;font-weight:700;">Today's Prayers</p>
+            <p id="prayers-date" style="font-size:13px;color:var(--text-muted);"></p>
+          </div>
+          <div id="prayers-list"></div>
+        </div>
+
+        <!-- Iqama settings -->
+        <div class="card">
+          <p style="font-size:15px;font-weight:700;margin-bottom:4px;">Iqama Alert Settings</p>
+          <p style="font-size:12px;color:var(--text-muted);margin-bottom:16px;">Get alerted before Iqama time</p>
+          <div id="iqama-settings"></div>
+        </div>
+
+        <!-- Hijri date -->
+        <div class="card-dark">
+          <p style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.4);font-weight:600;margin-bottom:12px;">Hijri Date</p>
+          <p id="hijri-date" class="font-arabic" style="font-size:28px;color:var(--gold-light);text-align:right;direction:rtl;line-height:1.5;">—</p>
+          <p id="hijri-date-latin" style="font-size:14px;color:rgba(255,255,255,0.5);margin-top:6px;">—</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SPIRITUAL PAGE ===== -->
+  <div id="page-spiritual" class="page">
+    <div class="topbar">
+      <div>
+        <p style="font-size:24px;font-weight:700;">Spiritual 📿</p>
+        <p style="font-size:14px;color:var(--text-muted);margin-top:4px;">Athkar, Quran & daily worship</p>
+      </div>
+    </div>
+
+    <!-- Athkar sections -->
+    <div style="display:grid;gap:20px;">
+      <div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+          <p style="font-size:16px;font-weight:700;">Morning Athkar <span style="color:var(--text-muted);font-size:13px;font-weight:400;">أذكار الصباح</span></p>
+          <button onclick="resetAthkar('morning')" class="btn-small">Reset</button>
+        </div>
+        <div id="morning-athkar"></div>
+      </div>
+
+      <div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+          <p style="font-size:16px;font-weight:700;">Evening Athkar <span style="color:var(--text-muted);font-size:13px;font-weight:400;">أذكار المساء</span></p>
+          <button onclick="resetAthkar('evening')" class="btn-small">Reset</button>
+        </div>
+        <div id="evening-athkar"></div>
+      </div>
+
+      <!-- Quran tracker -->
+      <div class="card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+          <div>
+            <p style="font-size:16px;font-weight:700;">Quran Reading Goal 📖</p>
+            <p style="font-size:13px;color:var(--text-muted);">Daily page goal</p>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <button onclick="changeQuranGoal(-1)" class="btn-secondary" style="padding:6px 14px;">−</button>
+            <span id="quran-goal-display" style="font-size:18px;font-weight:700;min-width:40px;text-align:center;">2</span>
+            <button onclick="changeQuranGoal(1)" class="btn-secondary" style="padding:6px 14px;">+</button>
+          </div>
+        </div>
+        <div class="quran-progress-bar">
+          <div class="quran-progress-fill" id="quran-progress-fill" style="width:0%"></div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;">
+          <p style="font-size:13px;color:var(--text-muted);">Pages read: <span id="quran-pages-read" style="font-weight:700;color:var(--text-dark);">0</span> / <span id="quran-pages-goal">2</span></p>
+          <div style="display:flex;gap:8px;">
+            <button onclick="changeQuranPages(-1)" class="btn-secondary" style="padding:6px 12px;">−1</button>
+            <button onclick="changeQuranPages(1)" class="btn-secondary" style="padding:6px 12px;">+1</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== HEALTH PAGE ===== -->
+  <div id="page-health" class="page">
+    <div class="topbar">
+      <div>
+        <p style="font-size:24px;font-weight:700;">Health 💪</p>
+        <p style="font-size:14px;color:var(--text-muted);margin-top:4px;">Water, exercise & wellness</p>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+      <!-- Water tracker -->
+      <div class="card" style="grid-column:1/-1;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+          <div>
+            <p style="font-size:16px;font-weight:700;">Water Intake 💧</p>
+            <p style="font-size:13px;color:var(--text-muted);">Goal: <span id="water-goal-label">8</span> glasses per day</p>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <label style="font-size:12px;color:var(--text-muted);">Goal:</label>
+            <input id="water-goal-input" type="number" min="4" max="20" value="8" class="form-input" style="width:70px;" onchange="setWaterGoal()" />
+          </div>
+        </div>
+        <div id="water-glasses" style="display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;margin-bottom:16px;"></div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <p style="font-size:28px;font-weight:700;" id="water-count-big">0</p>
+          <p style="font-size:14px;color:var(--text-muted);">of <span id="water-goal-of">8</span> glasses</p>
+          <button onclick="logWater()" class="btn-primary" style="margin-left:auto;width:auto;padding:10px 24px;">+ Add Glass</button>
+          <button onclick="resetWater()" class="btn-small">Reset</button>
+        </div>
+        <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--cream-dark);">
+          <p style="font-size:12px;color:var(--text-muted);">💡 Water reminders are sent every <strong>2 hours</strong> from 7 AM to 9 PM</p>
+        </div>
+      </div>
+
+      <!-- Exercise -->
+      <div class="card">
+        <p style="font-size:16px;font-weight:700;margin-bottom:4px;">Exercise Log 🏃</p>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">Track today's activity</p>
+        <div id="exercise-list" style="margin-bottom:12px;"></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button onclick="logExercise('Morning Walk')" class="btn-secondary" style="flex:1;">🚶 Walk</button>
+          <button onclick="logExercise('Workout')" class="btn-secondary" style="flex:1;">🏋️ Workout</button>
+          <button onclick="logExercise('Run')" class="btn-secondary" style="flex:1;">🏃 Run</button>
+        </div>
+        <button onclick="logExercise(prompt('Activity name:'))" class="btn-secondary" style="width:100%;margin-top:8px;">+ Custom</button>
+      </div>
+
+      <!-- Reminder settings -->
+      <div class="card">
+        <p style="font-size:16px;font-weight:700;margin-bottom:4px;">Health Reminders</p>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">Configure your alerts</p>
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div>
+              <p style="font-size:14px;font-weight:600;">Water Reminder</p>
+              <p style="font-size:12px;color:var(--text-muted);">Every 2 hours</p>
+            </div>
+            <label class="toggle"><input type="checkbox" id="toggle-water-reminder" checked onchange="saveSettings()" /><span class="toggle-slider"></span></label>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div>
+              <p style="font-size:14px;font-weight:600;">Exercise Reminder</p>
+              <p style="font-size:12px;color:var(--text-muted);">Daily at 7:00 AM</p>
+            </div>
+            <label class="toggle"><input type="checkbox" id="toggle-exercise-reminder" checked onchange="saveSettings()" /><span class="toggle-slider"></span></label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TASKS PAGE ===== -->
+  <div id="page-tasks" class="page">
+    <div class="topbar">
+      <div>
+        <p style="font-size:24px;font-weight:700;">My Tasks ✅</p>
+        <p style="font-size:14px;color:var(--text-muted);margin-top:4px;">Personal to-do list with reminders</p>
+      </div>
+    </div>
+
+    <!-- Add task form -->
+    <div class="card" style="margin-bottom:24px;">
+      <p style="font-size:15px;font-weight:700;margin-bottom:14px;">Add New Task</p>
+      <div style="display:grid;grid-template-columns:1fr auto auto auto;gap:10px;align-items:end;">
+        <div>
+          <label style="font-size:12px;font-weight:600;color:var(--text-muted);display:block;margin-bottom:6px;">Task Name</label>
+          <input id="task-name-input" type="text" class="form-input" placeholder="What do you need to do?" />
+        </div>
+        <div>
+          <label style="font-size:12px;font-weight:600;color:var(--text-muted);display:block;margin-bottom:6px;">Time</label>
+          <input id="task-time-input" type="time" class="form-input" />
+        </div>
+        <div>
+          <label style="font-size:12px;font-weight:600;color:var(--text-muted);display:block;margin-bottom:6px;">Category</label>
+          <select id="task-cat-input" class="form-input">
+            <option value="personal">Personal</option>
+            <option value="family">Family</option>
+            <option value="work">Work</option>
+            <option value="health">Health</option>
+          </select>
+        </div>
+        <button onclick="addTask()" class="btn-primary" style="width:auto;padding:10px 20px;">Add</button>
+      </div>
+    </div>
+
+    <!-- Tasks list -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+      <p style="font-size:15px;font-weight:700;">Today's Tasks</p>
+      <button onclick="clearCompletedTasks()" class="btn-small">Clear completed</button>
+    </div>
+    <div id="tasks-list">
+      <p style="text-align:center;padding:40px;color:var(--text-muted);">No tasks yet. Add your first task above!</p>
+    </div>
+  </div>
+
+</div><!-- end main-app -->
+
+<!-- Mobile bottom nav -->
+<div id="mobile-nav">
+  <div class="mob-nav-item active" data-page="home" onclick="navigate('home')">
+    <span class="mob-nav-icon">🏠</span>Home
+  </div>
+  <div class="mob-nav-item" data-page="prayers" onclick="navigate('prayers')">
+    <span class="mob-nav-icon">🕌</span>Prayers
+  </div>
+  <div class="mob-nav-item" data-page="spiritual" onclick="navigate('spiritual')">
+    <span class="mob-nav-icon">📿</span>Spiritual
+  </div>
+  <div class="mob-nav-item" data-page="health" onclick="navigate('health')">
+    <span class="mob-nav-icon">💧</span>Health
+  </div>
+  <div class="mob-nav-item" data-page="tasks" onclick="navigate('tasks')">
+    <span class="mob-nav-icon">✅</span>Tasks
+  </div>
+</div>
+
+<!-- Settings Modal -->
+<div id="settings-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:500;align-items:center;justify-content:center;">
+  <div style="background:var(--cream);border-radius:24px;padding:32px;width:100%;max-width:440px;margin:16px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
+      <p style="font-size:20px;font-weight:700;">Settings ⚙️</p>
+      <button onclick="hideSettingsModal()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--text-muted);">✕</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:16px;">
+      <div>
+        <label style="font-size:12px;font-weight:600;color:var(--text-muted);display:block;margin-bottom:6px;">Your Name</label>
+        <input id="settings-name" class="form-input" type="text" />
+      </div>
+      <div>
+        <label style="font-size:12px;font-weight:600;color:var(--text-muted);display:block;margin-bottom:6px;">Family Role</label>
+        <select id="settings-role" class="form-input">
+          <option>Father</option><option>Mother</option><option>Son</option><option>Daughter</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:12px;font-weight:600;color:var(--text-muted);display:block;margin-bottom:6px;">City</label>
+        <input id="settings-city" class="form-input" type="text" />
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div>
+          <p style="font-size:14px;font-weight:600;">Morning Athkar Reminder</p>
+          <p style="font-size:12px;color:var(--text-muted);">At 6:00 AM</p>
+        </div>
+        <label class="toggle"><input type="checkbox" id="toggle-morning-athkar" checked onchange="saveSettings()" /><span class="toggle-slider"></span></label>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div>
+          <p style="font-size:14px;font-weight:600;">Evening Athkar Reminder</p>
+          <p style="font-size:12px;color:var(--text-muted);">At 5:00 PM</p>
+        </div>
+        <label class="toggle"><input type="checkbox" id="toggle-evening-athkar" checked onchange="saveSettings()" /><span class="toggle-slider"></span></label>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div>
+          <p style="font-size:14px;font-weight:600;">Quran Reading Reminder</p>
+          <p style="font-size:12px;color:var(--text-muted);">At 8:00 AM</p>
+        </div>
+        <label class="toggle"><input type="checkbox" id="toggle-quran-reminder" checked onchange="saveSettings()" /><span class="toggle-slider"></span></label>
+      </div>
+      <button onclick="saveProfileSettings()" class="btn-primary" style="margin-top:8px;">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// DATA & STATE
+// ============================================================
+const PRAYER_NAMES = ['Fajr','Sunrise','Dhuhr','Asr','Maghrib','Isha'];
+
+const MORNING_ATHKAR = [
+  { id:'ma1', arabic:'أَعُوذُ بِاللهِ السَّمِيعِ الْعَلِيمِ مِنَ الشَّيْطَانِ الرَّجِيمِ', translation:'I seek refuge in Allah, the All-Hearing, All-Knowing, from the accursed devil.', total:3 },
+  { id:'ma2', arabic:'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ', translation:'In the name of Allah, the Most Gracious, the Most Merciful.', total:3 },
+  { id:'ma3', arabic:'اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ', translation:'O Allah, You are my Lord. None has the right to be worshipped but You. You created me and I am your servant.', total:1 },
+  { id:'ma4', arabic:'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ', translation:'Glorified is Allah and praised is He.', total:100 },
+  { id:'ma5', arabic:'لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ', translation:'None has the right to be worshipped but Allah alone with no partner.', total:10 },
+];
+
+const EVENING_ATHKAR = [
+  { id:'ea1', arabic:'أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ', translation:'We have reached the evening and the whole kingdom belongs to Allah.', total:1 },
+  { id:'ea2', arabic:'اللَّهُمَّ بِكَ أَمْسَيْنَا، وَبِكَ أَصْبَحْنَا', translation:'O Allah, by Your leave we have reached the evening and by Your leave we have reached the morning.', total:1 },
+  { id:'ea3', arabic:'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ', translation:'Glorified is Allah and praised is He.', total:100 },
+  { id:'ea4', arabic:'أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ', translation:'I seek the forgiveness of Allah and repent to Him.', total:100 },
+];
+
+const CAT_COLORS = {
+  personal: '#8b5cf6', family: '#f59e0b', work: '#3b82f6', health: '#10b981'
+};
+
+let state = {
+  user: { name: '', role: 'Father', city: 'Jeddah' },
+  water: { count: 0, goal: 8 },
+  quran: { pages: 0, goal: 2 },
+  athkar: { morning: {}, evening: {} },
+  tasks: [],
+  exercise: [],
+  prayers: null,
+  settings: {
+    waterReminder: true, exerciseReminder: true,
+    morningAthkar: true, eveningAthkar: true, quranReminder: true,
+    iqamaOffset: { Fajr:5, Dhuhr:10, Asr:5, Maghrib:5, Isha:10 }
+  },
+  date: todayStr()
+};
+
+function todayStr() {
+  return new Date().toISOString().split('T')[0];
+}
+
+// ============================================================
+// LOAD / SAVE
+// ============================================================
+function loadState() {
+  const saved = localStorage.getItem('adhkar_state_v2');
+  if (saved) {
+    try {
+      const parsed = JSON.parse(saved);
+      // Reset daily data if new day
+      if (parsed.date !== todayStr()) {
+        parsed.water.count = 0;
+        parsed.quran.pages = 0;
+        parsed.athkar = { morning: {}, evening: {} };
+        parsed.exercise = [];
+        parsed.tasks = (parsed.tasks || []).map(t => ({ ...t, done: false }));
+        parsed.date = todayStr();
+      }
+      state = { ...state, ...parsed };
+    } catch(e) {}
+  }
+}
+
+function saveState() {
+  localStorage.setItem('adhkar_state_v2', JSON.stringify(state));
+}
+
+// ============================================================
+// ONBOARDING
+// ============================================================
+let selectedRole = '';
+
+document.getElementById('ob-name').addEventListener('input', function() {
+  document.getElementById('ob-start-btn').disabled = !this.value.trim() || !selectedRole;
+});
+
+function selectRole(btn, role) {
+  selectedRole = role;
+  document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('ob-start-btn').disabled = !document.getElementById('ob-name').value.trim();
+}
+
+function startApp() {
+  const name = document.getElementById('ob-name').value.trim();
+  const city = document.getElementById('ob-city').value.trim() || 'Jeddah';
+  if (!name || !selectedRole) return;
+  state.user = { name, role: selectedRole, city };
+  state.date = todayStr();
+  saveState();
+  launchApp();
+}
+
+function launchApp() {
+  document.getElementById('onboarding').classList.add('hidden');
+  setTimeout(() => { document.getElementById('onboarding').style.display = 'none'; }, 700);
+  document.getElementById('main-app').style.display = 'block';
+  initApp();
+}
+
+// ============================================================
+// INIT
+// ============================================================
+function initApp() {
+  updateProfileUI();
+  updateHomeGreeting();
+  renderAthkar();
+  renderTasks();
+  renderWater();
+  renderExercise();
+  updateStats();
+  fetchPrayerTimes();
+  checkNotificationPermission();
+  startClock();
+  scheduleReminders();
+
+  // Restore settings toggles
+  document.getElementById('toggle-water-reminder').checked = state.settings.waterReminder;
+  document.getElementById('toggle-exercise-reminder').checked = state.settings.exerciseReminder;
+  document.getElementById('toggle-morning-athkar').checked = state.settings.morningAthkar;
+  document.getElementById('toggle-evening-athkar').checked = state.settings.eveningAthkar;
+  document.getElementById('toggle-quran-reminder').checked = state.settings.quranReminder;
+
+  document.getElementById('water-goal-input').value = state.water.goal;
+  document.getElementById('quran-goal-display').textContent = state.quran.goal;
+  document.getElementById('quran-pages-goal').textContent = state.quran.goal;
+  document.getElementById('prayer-city-input').value = state.user.city;
+}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function navigate(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.mob-nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  document.querySelectorAll(`[data-page="${page}"]`).forEach(el => el.classList.add('active'));
+  closeSidebar();
+  if (page === 'prayers') renderPrayers();
+  if (page === 'home') { updateHomeGreeting(); updateStats(); renderHomeTasks(); }
+}
+
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const backdrop = document.getElementById('sidebar-backdrop');
+  sidebar.classList.toggle('open');
+  backdrop.style.display = sidebar.classList.contains('open') ? 'block' : 'none';
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-backdrop').style.display = 'none';
+}
+
+// ============================================================
+// PROFILE UI
+// ============================================================
+function updateProfileUI() {
+  const initials = state.user.name.substring(0,2).toUpperCase();
+  document.getElementById('sidebar-avatar').textContent = initials;
+  document.getElementById('mobile-avatar').textContent = initials;
+  document.getElementById('sidebar-name').textContent = state.user.name;
+  document.getElementById('sidebar-role').textContent = state.user.role;
+  document.getElementById('prayer-city-label').textContent = `Umm Al-Qura • ${state.user.city}`;
+}
+
+function showSettingsModal() {
+  document.getElementById('settings-name').value = state.user.name;
+  document.getElementById('settings-role').value = state.user.role;
+  document.getElementById('settings-city').value = state.user.city;
+  document.getElementById('settings-modal').style.display = 'flex';
+}
+function hideSettingsModal() {
+  document.getElementById('settings-modal').style.display = 'none';
+}
+function showProfileModal() { showSettingsModal(); }
+
+function saveProfileSettings() {
+  state.user.name = document.getElementById('settings-name').value.trim() || state.user.name;
+  state.user.role = document.getElementById('settings-role').value;
+  state.user.city = document.getElementById('settings-city').value.trim() || state.user.city;
+  saveState();
+  updateProfileUI();
+  updateHomeGreeting();
+  hideSettingsModal();
+  fetchPrayerTimes();
+  showToast('✅ Profile updated!', 'spiritual');
+}
+
+function saveSettings() {
+  state.settings.waterReminder = document.getElementById('toggle-water-reminder').checked;
+  state.settings.exerciseReminder = document.getElementById('toggle-exercise-reminder').checked;
+  state.settings.morningAthkar = document.getElementById('toggle-morning-athkar').checked;
+  state.settings.eveningAthkar = document.getElementById('toggle-evening-athkar').checked;
+  state.settings.quranReminder = document.getElementById('toggle-quran-reminder').checked;
+  saveState();
+}
+
+// ============================================================
+// HOME GREETING & CLOCK
+// ============================================================
+function updateHomeGreeting() {
+  const h = new Date().getHours();
+  let greet = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+  document.getElementById('home-greeting').innerHTML = `${greet}, <span class="greeting-name" id="home-name">${state.user.name}</span> ✦`;
+  const opts = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
+  document.getElementById('home-date').textContent = new Date().toLocaleDateString('en-US', opts);
+  document.getElementById('home-athkar-preview').textContent = MORNING_ATHKAR[0].arabic;
+}
+
+function startClock() {
+  updateCountdown();
+  setInterval(updateCountdown, 10000);
+  setInterval(updateHomeGreeting, 60000);
+}
+
+// ============================================================
+// PRAYER TIMES
+// ============================================================
+async function fetchPrayerTimes() {
+  const city = state.user.city || 'Jeddah';
+  const today = new Date();
+  const url = `https://api.aladhan.com/v1/timingsByCity/${today.getDate()}-${today.getMonth()+1}-${today.getFullYear()}?city=${encodeURIComponent(city)}&country=SA&method=4`;
+
+  document.getElementById('prayer-loading').style.display = 'block';
+  document.getElementById('prayer-content').style.display = 'none';
+
+  try {
+    const resp = await fetch(url);
+    const data = await resp.json();
+    if (data.code === 200) {
+      state.prayers = data.data.timings;
+      state.hijri = data.data.date.hijri;
+      saveState();
+      renderPrayers();
+      updateNextPrayerHome();
+      showToast('🕌 Prayer times updated for ' + city, 'prayer');
+    } else {
+      throw new Error('API error');
+    }
+  } catch(e) {
+    // Fallback times
+    state.prayers = { Fajr:'04:45',Sunrise:'06:10',Dhuhr:'12:15',Asr:'15:30',Maghrib:'18:45',Isha:'20:15' };
+    renderPrayers();
+    updateNextPrayerHome();
+    showToast('⚠️ Using estimated prayer times', 'prayer');
+  }
+  document.getElementById('prayer-loading').style.display = 'none';
+  document.getElementById('prayer-content').style.display = 'block';
+}
+
+function updatePrayerCity() {
+  const city = document.getElementById('prayer-city-input').value.trim();
+  if (city) { state.user.city = city; saveState(); updateProfileUI(); fetchPrayerTimes(); }
+}
+
+function renderPrayers() {
+  if (!state.prayers) return;
+  const list = document.getElementById('prayers-list');
+  if (!list) return;
+
+  const now = new Date();
+  const nowMins = now.getHours() * 60 + now.getMinutes();
+
+  const prayerOrder = ['Fajr','Sunrise','Dhuhr','Asr','Maghrib','Isha'];
+  let nextPrayerIdx = -1;
+
+  list.innerHTML = prayerOrder.map((p, i) => {
+    const timeStr = state.prayers[p];
+    if (!timeStr) return '';
+    const [h, m] = timeStr.split(':').map(Number);
+    const pMins = h * 60 + m;
+    const isCurrent = (pMins <= nowMins && (i === prayerOrder.length-1 || nowMins < getPrayerMins(prayerOrder[i+1])));
+    const isPast = pMins < nowMins;
+    const isNext = !isPast && nextPrayerIdx === -1 && p !== 'Sunrise';
+    if (isNext) nextPrayerIdx = i;
+
+    const offset = state.settings.iqamaOffset[p] || 5;
+    const iqMins = pMins + offset;
+    const iqH = Math.floor(iqMins / 60) % 24;
+    const iqM = iqMins % 60;
+    const iqStr = p !== 'Sunrise' ? `${String(iqH).padStart(2,'0')}:${String(iqM).padStart(2,'0')}` : null;
+
+    return `<div class="prayer-row${isNext ? ' current' : ''}">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span style="font-size:18px;">${getPrayerIcon(p)}</span>
+        <div>
+          <p class="prayer-name">${p}</p>
+          ${iqStr ? `<p style="font-size:11px;color:var(--text-muted);">Iqama ${iqStr}</p>` : ''}
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <p class="prayer-time-text" style="${isPast?'color:var(--text-muted);':''}">${formatTime(timeStr)}</p>
+        ${isNext ? '<span class="iqama-badge">Next</span>' : ''}
+      </div>
+    </div>`;
+  }).join('');
+
+  // Hijri date
+  if (state.hijri) {
+    document.getElementById('hijri-date').textContent = `${state.hijri.day} ${state.hijri.month.ar} ${state.hijri.year}`;
+    document.getElementById('hijri-date-latin').textContent = `${state.hijri.day} ${state.hijri.month.en} ${state.hijri.year} AH`;
+  }
+
+  // Render iqama settings
+  renderIqamaSettings();
+  document.getElementById('prayers-date').textContent = new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+}
+
+function renderIqamaSettings() {
+  const el = document.getElementById('iqama-settings');
+  if (!el) return;
+  const prayers = ['Fajr','Dhuhr','Asr','Maghrib','Isha'];
+  el.innerHTML = prayers.map(p => `
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+      <p style="font-size:14px;font-weight:600;">${p}</p>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <button onclick="changeIqama('${p}',-1)" class="btn-secondary" style="padding:4px 12px;">−</button>
+        <span style="font-size:14px;font-weight:600;min-width:30px;text-align:center;">${state.settings.iqamaOffset[p] || 5}m</span>
+        <button onclick="changeIqama('${p}',1)" class="btn-secondary" style="padding:4px 12px;">+</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function changeIqama(prayer, delta) {
+  state.settings.iqamaOffset[prayer] = Math.max(0, Math.min(30, (state.settings.iqamaOffset[prayer]||5) + delta));
+  saveState(); renderPrayers();
+}
+
+function getPrayerMins(p) {
+  if (!state.prayers || !state.prayers[p]) return 9999;
+  const [h,m] = state.prayers[p].split(':').map(Number);
+  return h*60+m;
+}
+
+function getPrayerIcon(p) {
+  const icons = { Fajr:'🌙', Sunrise:'🌅', Dhuhr:'☀️', Asr:'🌤️', Maghrib:'🌇', Isha:'🌃' };
+  return icons[p] || '🕌';
+}
+
+function formatTime(t) {
+  if (!t) return '--:--';
+  const [h, m] = t.split(':').map(Number);
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  const h12 = h % 12 || 12;
+  return `${h12}:${String(m).padStart(2,'0')} ${ampm}`;
+}
+
+function updateNextPrayerHome() {
+  if (!state.prayers) return;
+  const now = new Date();
+  const nowMins = now.getHours() * 60 + now.getMinutes();
+  const order = ['Fajr','Dhuhr','Asr','Maghrib','Isha'];
+  let next = null;
+
+  for (const p of order) {
+    const [h,m] = (state.prayers[p] || '23:59').split(':').map(Number);
+    if (h*60+m > nowMins) { next = { name: p, h, m }; break; }
+  }
+  if (!next) next = { name: 'Fajr', ...parseTime(state.prayers.Fajr) };
+
+  document.getElementById('home-next-prayer-name').textContent = next.name;
+  document.getElementById('home-next-prayer-time').textContent = formatTime(`${next.h}:${next.m}`);
+
+  const offset = state.settings.iqamaOffset[next.name] || 5;
+  const iqMins = next.h*60 + next.m + offset;
+  document.getElementById('home-iqama-time').textContent = `Iqama: ${String(Math.floor(iqMins/60)%24).padStart(2,'0')}:${String(iqMins%60).padStart(2,'0')} (${offset}m after Adhan)`;
+
+  updateCountdown(next);
+}
+
+function parseTime(t) {
+  if (!t) return {h:0,m:0};
+  const [h,m] = t.split(':').map(Number);
+  return {h,m};
+}
+
+function updateCountdown(next) {
+  if (!state.prayers) return;
+  if (!next) {
+    const now = new Date();
+    const nowMins = now.getHours() * 60 + now.getMinutes();
+    const order = ['Fajr','Dhuhr','Asr','Maghrib','Isha'];
+    for (const p of order) {
+      const [h,m] = (state.prayers[p] || '23:59').split(':').map(Number);
+      if (h*60+m > nowMins) { next = { name: p, h, m }; break; }
+    }
+    if (!next) return;
+  }
+  const now = new Date();
+  const target = new Date(now);
+  target.setHours(next.h, next.m, 0, 0);
+  if (target <= now) target.setDate(target.getDate() + 1);
+  const diff = Math.floor((target - now) / 1000);
+  const hr = Math.floor(diff / 3600);
+  const min = Math.floor((diff % 3600) / 60);
+  const el = document.getElementById('home-next-prayer-countdown');
+  if (el) el.textContent = `In ${hr}h ${min}m`;
+}
+
+// ============================================================
+// ATHKAR
+// ============================================================
+function renderAthkar() {
+  renderAthkarSection('morning', MORNING_ATHKAR, 'morning-athkar');
+  renderAthkarSection('evening', EVENING_ATHKAR, 'evening-athkar');
+}
+
+function renderAthkarSection(type, list, containerId) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  el.innerHTML = list.map(a => {
+    const count = state.athkar[type][a.id] || 0;
+    const done = count >= a.total;
+    return `<div class="athkar-card${done?' opacity-75':''}" style="margin-bottom:16px;">
+      <p class="athkar-text">${a.arabic}</p>
+      <p class="athkar-translation" style="margin-bottom:16px;">${a.translation}</p>
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div>
+          <p style="font-size:13px;color:rgba(255,255,255,0.5);">${count} / ${a.total}</p>
+          <div style="width:120px;height:4px;background:rgba(255,255,255,0.1);border-radius:2px;margin-top:6px;overflow:hidden;">
+            <div style="height:100%;background:var(--gold);border-radius:2px;width:${Math.min(100,(count/a.total)*100)}%;transition:width 0.3s;"></div>
+          </div>
+        </div>
+        <button class="athkar-count-btn${done?' opacity-50':''}" onclick="tapAthkar('${type}','${a.id}',${a.total})" ${done?'disabled':''}>
+          ${done ? '✓' : `${a.total-count}`}
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function tapAthkar(type, id, total) {
+  state.athkar[type][id] = Math.min(total, (state.athkar[type][id] || 0) + 1);
+  if (state.athkar[type][id] >= total) showToast(`📿 Dhikr completed!`, 'spiritual');
+  saveState();
+  renderAthkarSection(type, type === 'morning' ? MORNING_ATHKAR : EVENING_ATHKAR, type + '-athkar');
+  updateStats();
+}
+
+function resetAthkar(type) {
+  state.athkar[type] = {};
+  saveState();
+  renderAthkar();
+  updateStats();
+}
+
+// ============================================================
+// WATER TRACKER
+// ============================================================
+function renderWater() {
+  const el = document.getElementById('water-glasses');
+  if (!el) return;
+  const goal = state.water.goal;
+  el.innerHTML = '';
+  for (let i = 0; i < goal; i++) {
+    const filled = i < state.water.count;
+    const div = document.createElement('div');
+    div.className = 'water-glass' + (filled ? ' filled' : '');
+    div.title = filled ? 'Logged' : 'Click to log';
+    div.onclick = () => { if (!filled) logWater(); };
+    if (filled) {
+      const fill = document.createElement('div');
+      fill.className = 'water-fill';
+      fill.style.height = '100%';
+      div.appendChild(fill);
+    }
+    el.appendChild(div);
+  }
+  const cnt = document.getElementById('water-count-big');
+  if (cnt) cnt.textContent = state.water.count;
+  const goal1 = document.getElementById('water-goal-of');
+  if (goal1) goal1.textContent = goal;
+  const statEl = document.getElementById('stat-water');
+  if (statEl) statEl.textContent = `${state.water.count}/${goal}`;
+}
+
+function logWater() {
+  if (state.water.count >= state.water.goal) { showToast('💧 Daily water goal reached! Great job.', 'health'); return; }
+  state.water.count++;
+  saveState();
+  renderWater();
+  updateStats();
+  if (state.water.count === state.water.goal) showToast('🎉 Water goal complete! You drank ' + state.water.goal + ' glasses today.', 'health');
+}
+
+function resetWater() {
+  state.water.count = 0;
+  saveState();
+  renderWater();
+  updateStats();
+}
+
+function setWaterGoal() {
+  const val = parseInt(document.getElementById('water-goal-input').value);
+  if (val >= 4 && val <= 20) {
+    state.water.goal = val;
+    document.getElementById('water-goal-label').textContent = val;
+    saveState();
+    renderWater();
+  }
+}
+
+// ============================================================
+// EXERCISE
+// ============================================================
+function renderExercise() {
+  const el = document.getElementById('exercise-list');
+  if (!el) return;
+  if (!state.exercise.length) { el.innerHTML = '<p style="font-size:13px;color:var(--text-muted);margin-bottom:10px;">No exercises logged today.</p>'; return; }
+  el.innerHTML = state.exercise.map((ex, i) =>
+    `<div class="task-item" style="margin-bottom:8px;">
+      <span style="font-size:18px;">${getExIcon(ex.name)}</span>
+      <span style="flex:1;font-size:14px;font-weight:500;">${ex.name}</span>
+      <span style="font-size:12px;color:var(--text-muted);">${ex.time}</span>
+      <button onclick="removeExercise(${i})" class="btn-small" style="color:#ef4444;border-color:#fee2e2;">✕</button>
+    </div>`
+  ).join('');
+}
+
+function getExIcon(name) {
+  if (name.toLowerCase().includes('walk')) return '🚶';
+  if (name.toLowerCase().includes('run')) return '🏃';
+  if (name.toLowerCase().includes('workout')) return '🏋️';
+  if (name.toLowerCase().includes('swim')) return '🏊';
+  return '💪';
+}
+
+function logExercise(name) {
+  if (!name || !name.trim()) return;
+  const now = new Date();
+  state.exercise.push({ name: name.trim(), time: `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}` });
+  saveState();
+  renderExercise();
+  showToast(`💪 ${name} logged! Keep it up, ${state.user.name}!`, 'health');
+}
+
+function removeExercise(i) {
+  state.exercise.splice(i, 1);
+  saveState();
+  renderExercise();
+}
+
+// ============================================================
+// QURAN TRACKER
+// ============================================================
+function changeQuranGoal(delta) {
+  state.quran.goal = Math.max(1, Math.min(20, state.quran.goal + delta));
+  document.getElementById('quran-goal-display').textContent = state.quran.goal;
+  document.getElementById('quran-pages-goal').textContent = state.quran.goal;
+  saveState();
+  updateQuranUI();
+  updateStats();
+}
+
+function changeQuranPages(delta) {
+  state.quran.pages = Math.max(0, Math.min(state.quran.goal, state.quran.pages + delta));
+  saveState();
+  updateQuranUI();
+  updateStats();
+  if (state.quran.pages >= state.quran.goal) showToast(`📖 Quran goal complete! Masha'Allah!`, 'spiritual');
+}
+
+function updateQuranUI() {
+  const pct = Math.min(100, (state.quran.pages / state.quran.goal) * 100);
+  const fill = document.getElementById('quran-progress-fill');
+  if (fill) fill.style.width = pct + '%';
+  const pagesEl = document.getElementById('quran-pages-read');
+  if (pagesEl) pagesEl.textContent = state.quran.pages;
+}
+
+// ============================================================
+// TASKS
+// ============================================================
+function addTask() {
+  const name = document.getElementById('task-name-input').value.trim();
+  const time = document.getElementById('task-time-input').value;
+  const cat = document.getElementById('task-cat-input').value;
+  if (!name) { showToast('⚠️ Please enter a task name', ''); return; }
+  state.tasks.push({ id: Date.now(), name, time, cat, done: false });
+  document.getElementById('task-name-input').value = '';
+  document.getElementById('task-time-input').value = '';
+  saveState();
+  renderTasks();
+  renderHomeTasks();
+  updateStats();
+  showToast(`✅ Task "${name}" added!`, 'spiritual');
+}
+
+function renderTasks() {
+  const el = document.getElementById('tasks-list');
+  if (!el) return;
+  if (!state.tasks.length) { el.innerHTML = '<p style="text-align:center;padding:40px;color:var(--text-muted);">No tasks yet. Add your first task above!</p>'; return; }
+
+  // Sort: undone first, then by time
+  const sorted = [...state.tasks].sort((a,b) => {
+    if (a.done !== b.done) return a.done ? 1 : -1;
+    if (a.time && b.time) return a.time.localeCompare(b.time);
+    return 0;
+  });
+
+  el.innerHTML = sorted.map(t => `
+    <div class="task-item${t.done?' done':''}">
+      <div class="task-check${t.done?' checked':''}" onclick="toggleTask(${t.id})">
+        ${t.done ? '<span style="color:var(--night);font-size:14px;">✓</span>' : ''}
+      </div>
+      <div style="flex:1;">
+        <p class="task-title">${t.name}</p>
+        ${t.time ? `<p style="font-size:11px;color:var(--text-muted);">⏰ ${formatTime(t.time)}</p>` : ''}
+      </div>
+      <span style="width:8px;height:8px;border-radius:50%;background:${CAT_COLORS[t.cat]||'#aaa'};flex-shrink:0;" title="${t.cat}"></span>
+      <span class="task-time-badge">${t.cat}</span>
+      <button onclick="deleteTask(${t.id})" class="btn-small">✕</button>
+    </div>
+  `).join('');
+}
+
+function renderHomeTasks() {
+  const el = document.getElementById('home-tasks-preview');
+  if (!el) return;
+  const upcoming = state.tasks.filter(t => !t.done).slice(0, 3);
+  if (!upcoming.length) { el.innerHTML = '<p style="font-size:14px;color:var(--text-muted);text-align:center;padding:16px 0;">All done! 🎉</p>'; return; }
+  el.innerHTML = upcoming.map(t => `
+    <div class="task-item${t.done?' done':''}">
+      <div class="task-check${t.done?' checked':''}" onclick="toggleTask(${t.id});renderHomeTasks();updateStats();">
+        ${t.done ? '<span style="color:var(--night);font-size:14px;">✓</span>' : ''}
+      </div>
+      <p class="task-title">${t.name}</p>
+      ${t.time ? `<span class="task-time-badge">${formatTime(t.time)}</span>` : ''}
+    </div>
+  `).join('');
+}
+
+function toggleTask(id) {
+  const t = state.tasks.find(t => t.id === id);
+  if (t) { t.done = !t.done; saveState(); renderTasks(); renderHomeTasks(); updateStats(); }
+}
+
+function deleteTask(id) {
+  state.tasks = state.tasks.filter(t => t.id !== id);
+  saveState(); renderTasks(); renderHomeTasks(); updateStats();
+}
+
+function clearCompletedTasks() {
+  state.tasks = state.tasks.filter(t => !t.done);
+  saveState(); renderTasks(); updateStats();
+}
+
+// ============================================================
+// STATS
+// ============================================================
+function updateStats() {
+  document.getElementById('stat-water').textContent = `${state.water.count}/${state.water.goal}`;
+  document.getElementById('stat-quran').textContent = `${state.quran.pages}/${state.quran.goal}`;
+
+  const done = state.tasks.filter(t => t.done).length;
+  const total = state.tasks.length;
+  document.getElementById('stat-tasks').textContent = `${done}/${total}`;
+
+  const allAthkar = [...MORNING_ATHKAR, ...EVENING_ATHKAR];
+  const athkarDone = allAthkar.filter(a => {
+    const type = MORNING_ATHKAR.includes(a) ? 'morning' : 'evening';
+    return (state.athkar[type][a.id] || 0) >= a.total;
+  }).length;
+  const athkarPct = Math.round((athkarDone / allAthkar.length) * 100);
+  document.getElementById('stat-athkar').textContent = `${athkarPct}%`;
+
+  updateQuranUI();
+}
+
+// ============================================================
+// NOTIFICATIONS & REMINDERS
+// ============================================================
+function checkNotificationPermission() {
+  if (!('Notification' in window)) return;
+  if (Notification.permission === 'default') {
+    document.getElementById('notif-banner').style.display = 'flex';
+  }
+}
+
+function requestNotifPermission() {
+  if (!('Notification' in window)) return;
+  Notification.requestPermission().then(p => {
+    if (p === 'granted') {
+      document.getElementById('notif-banner').style.display = 'none';
+      showToast('🔔 Notifications enabled! You will receive prayer & reminder alerts.', 'spiritual');
+    }
+  });
+}
+
+function sendNotification(title, body, icon) {
+  if (Notification.permission === 'granted') {
+    new Notification(title, { body, icon: icon || '🕌' });
+  }
+  showToast(`${icon || '🔔'} ${title}: ${body}`, 'prayer');
+}
+
+function scheduleReminders() {
+  // Check every minute
+  setInterval(() => {
+    const now = new Date();
+    const h = now.getHours();
+    const m = now.getMinutes();
+    const hhmm = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+
+    // Water reminder every 2 hours 7-21
+    if (state.settings.waterReminder && m === 0 && h >= 7 && h <= 21 && h % 2 === 1) {
+      if (state.water.count < state.water.goal) {
+        sendNotification('💧 Water Reminder', `Hey ${state.user.name}, time to drink water! (${state.water.count}/${state.water.goal} glasses)`, '💧');
+      }
+    }
+
+    // Exercise reminder at 7 AM
+    if (state.settings.exerciseReminder && h === 7 && m === 0) {
+      sendNotification('🏃 Exercise Time!', `Good morning, ${state.user.name}! Time for your daily workout.`, '🏃');
+    }
+
+    // Morning athkar at 6 AM
+    if (state.settings.morningAthkar && h === 6 && m === 0) {
+      sendNotification('📿 Morning Athkar', `Assalamu Alaikum, ${state.user.name}! Time for morning athkar.`, '📿');
+    }
+
+    // Evening athkar at 5 PM
+    if (state.settings.eveningAthkar && h === 17 && m === 0) {
+      sendNotification('📿 Evening Athkar', `${state.user.name}, don't forget your evening athkar!`, '📿');
+    }
+
+    // Quran reminder at 8 AM
+    if (state.settings.quranReminder && h === 8 && m === 0) {
+      if (state.quran.pages < state.quran.goal) {
+        sendNotification('📖 Quran Time', `${state.user.name}, read your daily ${state.quran.goal} pages of Quran.`, '📖');
+      }
+    }
+
+    // Prayer Iqama alerts
+    if (state.prayers) {
+      ['Fajr','Dhuhr','Asr','Maghrib','Isha'].forEach(p => {
+        const offset = state.settings.iqamaOffset[p] || 5;
+        const [ph, pm] = (state.prayers[p] || '00:00').split(':').map(Number);
+        const alertH = ph;
+        const alertM = pm;
+        if (h === alertH && m === alertM) {
+          sendNotification(`🕌 ${p} Time!`, `Adhan time. Iqama in ${offset} minutes, ${state.user.name}.`, '🕌');
+        }
+        // Iqama alert
+        const iqMins = ph * 60 + pm + offset;
+        const iqH = Math.floor(iqMins / 60) % 24;
+        const iqM = iqMins % 60;
+        if (h === iqH && m === iqM) {
+          sendNotification(`🕌 ${p} Iqama`, `Iqama for ${p} is now. ${state.user.name}, hasten to prayer!`, '🕌');
+        }
+      });
+    }
+
+    // Task reminders
+    state.tasks.forEach(t => {
+      if (!t.done && t.time && t.time === hhmm) {
+        sendNotification(`⏰ Task Reminder`, `"${t.name}" — ${state.user.name}, it's time!`, '✅');
+      }
+    });
+
+  }, 60000);
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+function showToast(msg, type) {
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.innerHTML = `<p style="font-weight:600;margin-bottom:2px;">${msg.split(':')[0]}</p>${msg.includes(':') ? `<p style="font-size:12px;color:rgba(255,255,255,0.6);margin-top:3px;">${msg.split(':').slice(1).join(':')}</p>` : ''}`;
+  document.getElementById('toast-container').appendChild(el);
+  setTimeout(() => el.remove(), 5000);
+}
+
+// ============================================================
+// BOOT
+// ============================================================
+loadState();
+if (state.user.name) {
+  document.getElementById('onboarding').style.display = 'none';
+  document.getElementById('main-app').style.display = 'block';
+  initApp();
+  updateNextPrayerHome();
+} else {
+  // Show onboarding
+}
+
+// Auto-refresh prayer display every minute
+setInterval(() => {
+  if (state.prayers) updateNextPrayerHome();
+  if (document.getElementById('page-prayers').classList.contains('active')) renderPrayers();
+}, 60000);
+</script>
+</body>
+</html>
